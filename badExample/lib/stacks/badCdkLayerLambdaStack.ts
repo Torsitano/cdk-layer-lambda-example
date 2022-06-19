@@ -9,17 +9,14 @@ export class CdkLayerLambdaStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
-
+        // Creating the Lambda Layer
         const badLayer = new LayerVersion(this, 'BadLayer', {
-            compatibleRuntimes: [
-                Runtime.NODEJS_16_X
-            ],
-            compatibleArchitectures: [
-                Architecture.X86_64
-            ],
-            code: Code.fromAsset('src/layer/nodejs')
+            compatibleRuntimes: [ Runtime.NODEJS_16_X ],
+            compatibleArchitectures: [ Architecture.X86_64 ],
+            code: Code.fromAsset('src/layer')
         })
 
+        // Creating the Lambda
         const layerExampleLambda = new NodejsFunction(this, 'BadLayerExampleLambda', {
             entry: './src/lambda/handler.ts',
             handler: 'handler',
@@ -37,10 +34,12 @@ export class CdkLayerLambdaStack extends Stack {
                 ]               
             },
             layers: [
+                // Adding the above Layer to our Lambda
                 badLayer
             ]
         })
 
+        // Adding IAM Permissions used for our example
         layerExampleLambda.addToRolePolicy(
             new PolicyStatement({
                 effect: Effect.ALLOW,
@@ -50,6 +49,5 @@ export class CdkLayerLambdaStack extends Stack {
                 resources: ['*']
             })
         )
-        
     }
 }
