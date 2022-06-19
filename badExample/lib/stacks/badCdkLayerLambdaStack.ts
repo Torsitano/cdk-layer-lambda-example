@@ -1,6 +1,6 @@
 import { Duration, Stack, StackProps } from 'aws-cdk-lib'
 import { Effect, PolicyStatement } from 'aws-cdk-lib/aws-iam';
-import { LayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda';
+import { Architecture, Code, LayerVersion, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs'
 
@@ -9,7 +9,18 @@ export class CdkLayerLambdaStack extends Stack {
     constructor(scope: Construct, id: string, props?: StackProps) {
         super(scope, id, props);
 
-        const layerExampleLambda = new NodejsFunction(this, 'LayerExampleLambda', {
+
+        const badLayer = new LayerVersion(this, 'BadLayer', {
+            compatibleRuntimes: [
+                Runtime.NODEJS_16_X
+            ],
+            compatibleArchitectures: [
+                Architecture.X86_64
+            ],
+            code: Code.fromAsset('src/layer/nodejs')
+        })
+
+        const layerExampleLambda = new NodejsFunction(this, 'BadLayerExampleLambda', {
             entry: './src/lambda/handler.ts',
             handler: 'handler',
             runtime: Runtime.NODEJS_16_X,
@@ -26,7 +37,7 @@ export class CdkLayerLambdaStack extends Stack {
                 ]               
             },
             layers: [
-                LayerVersion.fromLayerVersionArn(this, 'CdkLayerExample', 'arn:aws:lambda:us-east-1:698852667105:layer:TsCdkLayerExample:1')
+                badLayer
             ]
         })
 

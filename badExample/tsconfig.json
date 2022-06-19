@@ -30,7 +30,7 @@
         ],
         "baseUrl": "./",
         "paths": {
-            "/opt/nodejs/node_modules/layer-example": ["./node_modules/layer-example"]
+            "/opt/nodejs/layer-example": ["./src/layer/nodejs/layer-example"]
         }
     },
     "include": [

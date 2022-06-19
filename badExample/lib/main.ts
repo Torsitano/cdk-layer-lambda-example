@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import 'source-map-support/register'
 import * as cdk from 'aws-cdk-lib'
-import { CdkLayerLambdaStack } from './stacks/cdkLayerLambdaStack'
+import { CdkLayerLambdaStack } from './stacks/badCdkLayerLambdaStack'
 
 const devEnv = {
     account: '698852667105',
@@ -9,4 +9,4 @@ const devEnv = {
   }
 
 const app = new cdk.App();
-new CdkLayerLambdaStack(app, 'CdkLayerLambdaStack', { env: devEnv } )
+new CdkLayerLambdaStack(app, 'BadLayerLambdaStack', { env: devEnv } )
